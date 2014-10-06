@@ -1,0 +1,11 @@
+"dungeonmaster"
+{
+	"base"		"sandbox"
+	"title"		"Dungeon Master"
+	"maps"		"^dm_"
+	"menusystem"	"1"
+	"settings"
+	{
+
+	}
+}
