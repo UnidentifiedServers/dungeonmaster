@@ -38,7 +38,7 @@ function SelectMaster()
 		if v == newmaster then
 			v:SetTeam(3)
 			v:Spawn()
-			v:SetMoveType(MOVETYPE_PUSH)
+			v:SetMoveType(MOVETYPE_OBSERVER)
 			v:SetNoDraw(true)
 			v:ChatPrint(v:Nick() .. ", you are the new Dungeon Master.")
 		else
