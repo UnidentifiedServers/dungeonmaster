@@ -33,7 +33,7 @@ function DrawPropHalo(ply)
 
     if IsValid(trace.Entity) and trace.Entity:GetClass() == "prop_physics" then
       hook.Add("PreDrawHalos", "DrawPropHalos", function()
-        halo.Add(trace.Entity, Color(255, 255, 255), 2, 2, 1)
+        halo.Add({trace.Entity}, Color(255, 255, 255), 2, 2, 1)
       end)
     end
   end
