@@ -39,6 +39,7 @@ function SelectMaster()
 			v:SetTeam(3)
 			v:Spawn()
 			v:SetMoveType(MOVETYPE_OBSERVER)
+			v:Spectate(OBS_MODE_ROAMING)
 			v:SetNoDraw(true)
 			v:ChatPrint(v:Nick() .. ", you are the new Dungeon Master.")
 		else
