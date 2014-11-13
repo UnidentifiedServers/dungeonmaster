@@ -1,13 +1,20 @@
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
+// AddCSLuaFile("player/inventory.lua")
 
 include('shared.lua')
+// include('player/inventory.lua')
+
+function GM:PlayerAuthed( ply, steamID, uniqueID )
+	print(ply:Nick() .. " has been authed.")
+end
 
 function GM:PlayerSpawn(ply)
     self.BaseClass:PlayerSpawn(ply)
     ply:StripWeapons()
     if ply:Team() == 2 then
     	ply:Give("weapon_fists")
+    	ply:AddItemToInventory(1, "badhammer")
     end
 end
 
@@ -17,6 +24,7 @@ end
 function GM:PlayerInitialSpawn(ply)
 	print('Player ' .. ply:Nick() .. " has joined the game.")
 	ply:SetTeam(1)
+	ply:SetNWString("SquadName", "None")
 end
 
 function GM:PlayerDisconnected(ply)
@@ -24,6 +32,40 @@ function GM:PlayerDisconnected(ply)
 		pl:ChatPrint(ply:Nick() .. " disconnected.")
 	end
 end
+
+/* Function Key Mappings
+----------------------*/
+
+// F1
+function GM:ShowHelp(ply)
+end
+
+// F2
+function GM:ShowTeam(ply)
+end
+
+// F3
+function GM:ShowSpare1(ply)
+	umsg.Start("dm_inventory", ply)
+	umsg.End()
+end
+
+// F4
+function GM:ShowSpare2(ply)
+end
+
+/* Item Spawns
+------------*/
+
+function SpawnItem()
+	local itemspawns = ents.FindByName("dment_itemspawn_*")
+end
+
+
+
+
+
+
 
 function SetPlayerTeam(ply)
 	ply:SetTeam(2)
@@ -56,6 +98,39 @@ function SelectMaster()
 	end
 end
 concommand.Add("dm_selectmaster", SelectMaster)
+
+function SetCurrentQuest(name)
+	for _,v in pairs(player.GetAll()) do
+		v:SetNWString("CurrentQuest", name)
+		v:SetNWBool("QuestComplete", false)
+	end
+end
+
+function SetPlayerSquad(ply, squad)
+	ply:SetNWString("SquadName", squad)
+end
+concommand.Add("dm_setsquad", function(ply, cmd, args)
+	SetPlayerSquad(ply, args[0])
+end)
+
+function GetSquadMembers(ply)
+	local squad = {}
+	for k,v in pairs(player.GetAll()) do
+		if v:GetNWString("SquadName") != "None" then
+			if v:GetNWString("SquadName") == ply:GetNWString("SquadName") then
+				squad[k] == v
+			end
+		end
+	end
+	return squad
+end
+
+function SetAllToSquad()
+	for _,v in pairs(player.GetAll()) do
+		v:SetNWString("SquadName", "Test")
+	end
+end
+concommand.Add("dm_test_setsquadall", SetAllToSquad)
 
 // function SelectNewMaster()
 //   local optedin = {}
