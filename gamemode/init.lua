@@ -42,6 +42,8 @@ end
 
 // F2
 function GM:ShowTeam(ply)
+	umsg.Start("dm_health", ply)
+	umsg.End()
 end
 
 // F3
@@ -61,11 +63,31 @@ function SpawnItem()
 	local itemspawns = ents.FindByName("dment_itemspawn_*")
 end
 
+concommand.Add("dm_sethealth", function(ply, cmd, args) NewHealth(ply, args) end)
 
+function NewHealth(ply, newHealth)
+	local newHealth = table.GetFirstValue(newHealth)
+	ply:SetHealth(newHealth)
+end
 
+//local stam = 100
 
+//function StaminaBar(ply)
+//	while ply:KeyDown(IN_SPEED) do
+//		stam = stam - 5
+//	end
+//	ply:SetNWInt("stamina", stam)
+//end
 
+//local StamEnabled = 0
 
+//while StamEnabled == 1 do
+//	for j,v in pairs(player.GetAll()) do
+//		StaminaBar(v)
+//	end
+//end
+
+//concommand.Add("dm_stamina", function(ply, cmd, args) StamEnabled = args end)
 
 function SetPlayerTeam(ply)
 	ply:SetTeam(2)
@@ -118,7 +140,7 @@ function GetSquadMembers(ply)
 	for k,v in pairs(player.GetAll()) do
 		if v:GetNWString("SquadName") != "None" then
 			if v:GetNWString("SquadName") == ply:GetNWString("SquadName") then
-				squad[k] == v
+				squad[k] = v
 			end
 		end
 	end
