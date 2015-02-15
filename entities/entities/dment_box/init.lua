@@ -49,6 +49,7 @@ end
 -- Touch --
 -----------
 function ENT:Touch(ent)
+	ent:SetPos(self:GetPos()+Vector(0, 0, 30))
 end
 
 --------------------
