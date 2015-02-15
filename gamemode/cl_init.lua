@@ -1,5 +1,6 @@
 include('shared.lua')
-//include('player/inventory.lua')
+include('interface/cl_dmenu.lua')
+--include('player/inventory.lua')
 
 function GM:SpawnMenuEnabled()
   return false
@@ -13,6 +14,16 @@ surface.CreateFont('dmfont1', {
 surface.CreateFont('dmfont2', {
   font = "Roboto-Light",
   size = 18
+})
+
+surface.CreateFont('dmfont3', {
+  font = "Roboto-Light",
+  size = 40
+})
+
+surface.CreateFont('dmmenufont', {
+  font = "trebuchet24",
+  size = 15
 })
 
 hook.Add("HUDShouldDraw", "HideDefault", function(name)
@@ -49,40 +60,41 @@ end
 function PlayerHUD(ply)
   draw.RoundedBox(0, 0, 0, ScrW(), 30, Color(0, 0, 0, 200))
   
-  // Info Graphic
+  -- Info Graphic
   local poot = 150
-  //draw.RoundedBox(1, 25, ScrH() - poot - 25, 300, poot, Color(0, 0, 0, 200))
+  --draw.RoundedBox(1, 25, ScrH() - poot - 25, 300, poot, Color(0, 0, 0, 200))
   draw.NoTexture()
   
-  // Health display
+  -- Health display
   local HP = ply:Health()
   
-  // Circle health
+  -- Circle health
   local circ = 100
-  draw.Circle(circ, ScrH() - poot / 1.5, 75, HP / 5 + 5, 232, 12, 30, 200)
-  draw.SimpleText( HP, "dmfont1", circ, ScrH() - poot / 1.5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, Color(0, 0, 0, 255))
+  draw.Circle(circ, ScrH() - poot / 1.5, 80, HP / 5 + 5, 0, 0, 0, 255)
+  draw.Circle(circ, ScrH() - poot / 1.5, 75, HP / 5 + 5, 232, 12, 30, 255)
+  draw.SimpleText( HP, "dmfont3", circ, ScrH() - poot / 1.5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, Color(0, 0, 0, 255))
   
-  // Bar health
-  //draw.OutlinedBox(175 - HP * 1.25, ScrH() - poot, HP * 2.5, 20, 25, Color(0, 0, 0, 255))
-  //draw.RoundedBox(1, 175 - HP * 1.25, ScrH() - poot, HP * 2.5, 20, Color(232, 12, 30, 255))
-  //draw.SimpleTextOutlined( HP, "dmfont1", 175, ScrH() - poot + 9, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1.5, Color(0, 0, 0, 255))
+  -- Bar health
+  --draw.OutlinedBox(175 - HP * 1.25, ScrH() - poot, HP * 2.5, 20, 25, Color(0, 0, 0, 255))
+  --draw.RoundedBox(1, 175 - HP * 1.25, ScrH() - poot, HP * 2.5, 20, Color(232, 12, 30, 255))
+  --draw.SimpleTextOutlined( HP, "dmfont1", 175, ScrH() - poot + 9, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1.5, Color(0, 0, 0, 255))
   
-  // Stamina Display
+  -- Stamina Display
   local stam = 100
   for j,v in pairs(player.GetAll()) do
 	stam = v:GetNWInt("stamina", 100)
   end
-  //draw.OutlinedBox(175 - stam * 1.25, ScrH() - poot + 75, stam * 2.5, 20, 25, Color(0, 0, 0, 255))
-  //draw.RoundedBox(1, 175 - stam * 1.25, ScrH() - poot + 75, stam * 2.5, 20, Color(12, 232, 30, 255))
-  //draw.SimpleTextOutlined( stam, "dmfont1", 175, ScrH() - poot + 84, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1.5, Color(0, 0, 0, 255))
+  --draw.OutlinedBox(175 - stam * 1.25, ScrH() - poot + 75, stam * 2.5, 20, 25, Color(0, 0, 0, 255))
+  --draw.RoundedBox(1, 175 - stam * 1.25, ScrH() - poot + 75, stam * 2.5, 20, Color(12, 232, 30, 255))
+  --draw.SimpleTextOutlined( stam, "dmfont1", 175, ScrH() - poot + 84, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1.5, Color(0, 0, 0, 255))
   
-  // Left Side of Status Bar
+  -- Left Side of Status Bar
   draw.SimpleText(team.GetName(ply:Team()), "dmfont1", 5, 15, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
-  // Right Side of Status Bar
+  -- Right Side of Status Bar
   draw.SimpleText("Players Left: " .. tostring(team.NumPlayers(2)), "dmfont1", ScrW()-5, 15, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
-  // Draw Weapon Information
+  -- Draw Weapon Information
   DrawWeaponInfo(ply)
 end
 
@@ -96,10 +108,10 @@ end
 function DrawSquadInfo(ply)
   draw.RoundedBox(0, 0, 30, 150, 60, Color(0, 0, 0, 200))
 
-  // SquadName Title
+  -- SquadName Title
   draw.SimpleText(ply:GetNWString("SquadName") .. " Squad", "dmfont1", 5, 45, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
-  // Display LocalPlayer First
+  -- Display LocalPlayer First
   draw.SimpleText(ply:Nick(), "dmfont2", 15, 60, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 end
 
@@ -114,7 +126,7 @@ hook.Add("HUDPaint", "ShowHUD", function()
   -------------------*/
 end)
 
-function HealthSlider()
+local function HealthSlider()
 	
 	
 	local frame = vgui.Create("DFrame")
@@ -138,7 +150,7 @@ function HealthSlider()
 	end
 end
 
-function ShowInventory()
+local function ShowInventory()
   local ply = LocalPlayer()
 
   local inv = vgui.Create("DFrame")
@@ -162,5 +174,6 @@ function ShowInventory()
     invlist:AddLine(v.name, v.desc)
   end
 end
+
 usermessage.Hook("dm_inventory", ShowInventory)
 usermessage.Hook("dm_health", HealthSlider)
