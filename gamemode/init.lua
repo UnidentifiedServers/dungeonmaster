@@ -11,6 +11,11 @@ function GM:PlayerAuthed( ply, steamID, uniqueID )
 	print(ply:Nick() .. " has been authed.")
 end
 
+local function DisableNoclip( ply )
+	return false
+end
+hook.Add( "PlayerNoClip", "DisableNoclip", DisableNoclip )
+
 function GM:PlayerSpawn(ply)
     self.BaseClass:PlayerSpawn(ply)
     ply:StripWeapons()
